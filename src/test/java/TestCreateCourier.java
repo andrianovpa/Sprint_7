@@ -1,3 +1,5 @@
+import com.google.gson.Gson;
+import groovy.transform.ToString;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
@@ -6,8 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
-import java.io.File;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -34,40 +34,38 @@ public class TestCreateCourier {
     @Before
     public void setUp() {
 
-        RestAssured.baseURI= "https://qa-scooter.praktikum-services.ru/";
+        RestAssured.baseURI = "https://qa-scooter.praktikum-services.ru/";
     }
+
     @Parameterized.Parameters
-    public  static  Object[][] getCredentials() {
-        return new Object[][] {
-                {"Pavel_Sprint_7_4", "12345678", "Павел", null, 201, "ok"},
-                {"Pavel_Sprint_7_4", "12345678", "Павел", "Этот логин уже используется", 409, "message"},
+    public static Object[][] getCredentials() {
+        return new Object[][]{
+                {"Pavel_Sprint_7_12", "12345678", "Павел", null, 201, "ok"},
+                {"Pavel_Sprint_7_12", "12345678", "Павел", "Этот логин уже используется", 409, "message"},
                 {"", "12345678", "Павел", "Недостаточно данных для создания учетной записи", 400, "message"},
-                {"Pavel_Sprint_7_5", "", "Павел", "Недостаточно данных для создания учетной записи", 400, "message"},
+                {"Pavel_Sprint_7_12", "", "Павел", "Недостаточно данных для создания учетной записи", 400, "message"},
 
         };
     }
+
     @Test
     @DisplayName("Check status code of /users/me") // имя теста
     @Description("Basic test for /users/me endpoint") // описание теста
     public void positiveCreateCourierTest() {
-        PostApi postApi = new PostApi();
-        Courier courier = new Courier(login, password, firstName);
-        postApi.createCourier(courier).then().statusCode(responseCode).assertThat().body(responseField, equalTo(result != null ? result : true));
+        CreateCourierApi createCourierApi = new CreateCourierApi();
+        CreateCourier courier = new CreateCourier(login, password, firstName);
+        createCourierApi.createCourier(courier).then().statusCode(responseCode).assertThat().body(responseField, equalTo(result != null ? result : true));
     }
-//    @After
-//    public void deleteCourier() {
-//
-//    }
-//        File json = new File("C:\\Users\\Pavel-PC\\Sprint_7\\src\\main\\resources\\CourierCreate.json");
-//        given()
-//                .header("Content-type", "application/json")
-//                .auth().oauth2("")
-//                .and()
-//                .body(json)
-//                .when()
-//                .post("/api/v1/courier")
-//                .then().statusCode(201)
-//                .assertThat()
-//                .body("ok", equalTo(true));
-//    }
+
+    @After
+    public void deleteCourier() {
+        LoginCourierApi loginCourierApi = new LoginCourierApi();
+        LoginCourier loginCourier = new LoginCourier(login, password);
+        int id = loginCourierApi.loginCourier(loginCourier).then().statusCode(200).extract().path("id");
+        String deleteId = String.format("%d", id);
+        DeleteCourierApi deleteCourierApi = new DeleteCourierApi();
+        DeleteCourier deleteCourier = new DeleteCourier(id);
+        deleteCourierApi.deleteCourier(deleteCourier, deleteId).then().statusCode(200);
+
+    }
 }
