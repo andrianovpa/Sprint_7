@@ -65,7 +65,7 @@ public class TestCreateCourier {
         String deleteId = String.format("%d", id);
         DeleteCourierApi deleteCourierApi = new DeleteCourierApi();
         DeleteCourier deleteCourier = new DeleteCourier(id);
-        deleteCourierApi.deleteCourier(deleteCourier, deleteId).then().statusCode(200);
+        deleteCourierApi.deleteCourier(deleteCourier, deleteId, deleteId).then().statusCode(200);
 
     }
 }
