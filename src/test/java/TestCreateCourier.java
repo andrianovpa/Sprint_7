@@ -68,4 +68,5 @@ public class TestCreateCourier {
         deleteCourierApi.deleteCourier(deleteCourier, deleteId, deleteId).then().statusCode(200);
 
     }
+    @Test
 }
