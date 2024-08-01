@@ -21,9 +21,12 @@ public class TestCreateOrder {
     private static int rentTime = 4;
     private static String deliveryDate = "2024-10-10";
     private static String comment = "Pasha will drive";
-    private final String[] color;
-    public TestCreateOrder(String[] color) {
-        this.color = color;
+    private static String color1;
+    private static String color2;
+    private final String[] color = {color1, color2};
+    public TestCreateOrder(String color1, String color2) {
+        this.color1 = color1;
+        this.color2 = color2;
 
     }
 
@@ -38,17 +41,17 @@ public class TestCreateOrder {
     @Parameterized.Parameters
     public  static  Object[][] getCredentials() {
         return new Object[][] {
-                {{"BLACK"}},
-                {{"GREY"}},
-                {{"BLACK", "GREY"}},
-                {null}
+                {"BLACK", null},
+                {null, "GREY"},
+                {"BLACK", "GREY"},
+                {null, null}
 
         };
     }
 
     @Test
-    @DisplayName("Позитивная проверка авторизации курьера") // имя теста
-    @Description("Направляется запрос на авторизацию курьера с валидными данными") // описание теста
+    @DisplayName("Позитивная проверка создания заказа") // имя теста
+    @Description("Направляется запрос на ") // описание теста
     public void positiveLoginCourierTest() {
         CreateOrdersApi createOrdersApi = new CreateOrdersApi();
         CreateOrders createOrders = new CreateOrders(firstName, lastName, address, metroStation, phone, rentTime, deliveryDate, comment, color);
