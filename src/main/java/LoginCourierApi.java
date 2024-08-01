@@ -1,3 +1,4 @@
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
 public class LoginCourierApi extends BaseHttpClient {
@@ -6,7 +7,7 @@ public class LoginCourierApi extends BaseHttpClient {
         public Response getCourierById(String id) {
             return doGetRequest(apiPath + id);
         }
-
+        @Step("Отправляется запрос на авторизацию пользователя")
         public Response loginCourier(LoginCourier courier) {
             return doPostRequest(apiPath, courier);
         }
