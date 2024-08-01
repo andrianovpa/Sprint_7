@@ -43,4 +43,11 @@ public abstract class BaseHttpClient {
                 .post(path)
                 .thenReturn();
     }
+    protected Response doDeleteRequest(String path, Object body) {
+        return given()
+                .spec(baseRequestSpec())
+                .body(body)
+                .delete(path)
+                .thenReturn();
+    }
 }
