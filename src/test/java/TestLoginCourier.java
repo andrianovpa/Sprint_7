@@ -17,8 +17,8 @@ public class TestLoginCourier {
     private static String negativePassword = "1234567";
 
 
-@Before
-        public void regCourier() {
+@BeforeClass
+        public static void regCourier() {
     CreateCourierApi createCourierApi = new CreateCourierApi();
     CreateCourier courier = new CreateCourier(login, password, firstName);
     createCourierApi.createCourier(courier);
@@ -44,7 +44,7 @@ public class TestLoginCourier {
     @Description("Направляется запрос на авторизацию курьера без пароля") // описание теста
     public void negativeLoginCourierTest_2() {
         LoginCourierApi loginCourierApi = new LoginCourierApi();
-        LoginCourier loginCourier = new LoginCourier(login, null);
+        LoginCourier loginCourier = new LoginCourier(login, "");
         loginCourierApi.loginCourier(loginCourier).then().statusCode(400).assertThat().body("message", equalTo("Недостаточно данных для входа"));
     }
     @Test
@@ -53,7 +53,7 @@ public class TestLoginCourier {
     public void negativeLoginCourierTest_3() {
         LoginCourierApi loginCourierApi = new LoginCourierApi();
         LoginCourier loginCourier = new LoginCourier(negativeLogin, password);
-        loginCourierApi.loginCourier(loginCourier).then().statusCode(400).assertThat().body("message", equalTo("Учетная запись не найдена"));
+        loginCourierApi.loginCourier(loginCourier).then().statusCode(404).assertThat().body("message", equalTo("Учетная запись не найдена"));
     }
     @Test
     @DisplayName("Негативная проверка авторизации курьера 4") // имя теста
@@ -61,7 +61,7 @@ public class TestLoginCourier {
     public void negativeLoginCourierTest_4() {
         LoginCourierApi loginCourierApi = new LoginCourierApi();
         LoginCourier loginCourier = new LoginCourier(login, negativePassword);
-        loginCourierApi.loginCourier(loginCourier).then().statusCode(400).assertThat().body("message", equalTo("Учетная запись не найдена"));
+        loginCourierApi.loginCourier(loginCourier).then().statusCode(404).assertThat().body("message", equalTo("Учетная запись не найдена"));
     }
     @Test
     @DisplayName("Негативная проверка авторизации курьера 5") // имя теста
@@ -69,7 +69,7 @@ public class TestLoginCourier {
     public void negativeLoginCourierTest_5() {
         LoginCourierApi loginCourierApi = new LoginCourierApi();
         LoginCourier loginCourier = new LoginCourier(negativeLogin, negativePassword);
-        loginCourierApi.loginCourier(loginCourier).then().statusCode(400).assertThat().body("message", equalTo("Учетная запись не найдена"));
+        loginCourierApi.loginCourier(loginCourier).then().statusCode(404).assertThat().body("message", equalTo("Учетная запись не найдена"));
     }
 
 
