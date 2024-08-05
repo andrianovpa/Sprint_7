@@ -1,3 +1,5 @@
+package api.model;
+
 public class CreateOrders {
     private String firstName;
     private String lastName;

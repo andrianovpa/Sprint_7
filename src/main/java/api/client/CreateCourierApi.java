@@ -1,3 +1,7 @@
+package api.client;
+
+import api.base.BaseHttpClient;
+import api.model.CreateCourier;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 

@@ -1,19 +1,14 @@
-import com.google.gson.Gson;
-import groovy.transform.ToString;
+import api.client.CreateCourierApi;
+import api.client.DeleteCourierApi;
+import api.client.LoginCourierApi;
+import api.model.CreateCourier;
+import api.model.DeleteCourier;
+import api.model.LoginCourier;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 
@@ -22,42 +17,6 @@ public class TestCreateCourier {
     private static String password = "12345678";
     private static String firstName = "Павел";
 
-    @Test
-    @DisplayName("Положительная проверка создания курьера") // имя теста
-    @Description("Направялется запрос на создание курьера с валидными данными") // описание теста
-    public void positiveCreateCourierTest() {
-
-        CreateCourierApi createCourierApi = new CreateCourierApi();
-        CreateCourier courier = new CreateCourier(login, password, firstName);
-        createCourierApi.createCourier(courier).then().statusCode(201).assertThat().body("ok", equalTo(true));
-    }
-    @Test
-    @DisplayName("Негативная проверка создания курьера 1") // имя теста
-    @Description("Направляется запрос на создание курьера с уже зарегестрированными данными") // описание теста
-    public void negativeCreateCourierTest_1() {
-
-        CreateCourierApi createCourierApi = new CreateCourierApi();
-        CreateCourier courier = new CreateCourier(login, password, firstName);
-        createCourierApi.createCourier(courier).then().statusCode(409).assertThat().body("message", equalTo("Этот логин уже используется"));
-    }
-    @Test
-    @DisplayName("Негативная проверка создания курьера 2") // имя теста
-    @Description("Направляется запрос на создание курьера без поля login") // описание теста
-    public void negativeCreateCourierTest_2() {
-
-        CreateCourierApi createCourierApi = new CreateCourierApi();
-        CreateCourier courier = new CreateCourier(null, password, firstName);
-        createCourierApi.createCourier(courier).then().statusCode(400).assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"));
-    }
-    @Test
-    @DisplayName("Негативная проверка создания курьера 3") // имя теста
-    @Description("Направляется запрос на создание курьера без поля password") // описание теста
-    public void negativeCreateCourierTest_3() {
-
-        CreateCourierApi createCourierApi = new CreateCourierApi();
-        CreateCourier courier = new CreateCourier(login, null, firstName);
-        createCourierApi.createCourier(courier).then().statusCode(400).assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"));
-    }
     @AfterClass
     public static void deleteCourier() {
         LoginCourierApi loginCourierApi = new LoginCourierApi();
@@ -68,5 +27,45 @@ public class TestCreateCourier {
         DeleteCourier deleteCourier = new DeleteCourier(id);
         deleteCourierApi.deleteCourier(deleteCourier, id);
 
+    }
+
+    @Test
+    @DisplayName("Положительная проверка создания курьера") // имя теста
+    @Description("Направялется запрос на создание курьера с валидными данными") // описание теста
+    public void positiveCreateCourierTest() {
+
+        CreateCourierApi createCourierApi = new CreateCourierApi();
+        CreateCourier courier = new CreateCourier(login, password, firstName);
+        createCourierApi.createCourier(courier).then().statusCode(201).assertThat().body("ok", equalTo(true));
+    }
+
+    @Test
+    @DisplayName("Негативная проверка создания курьера 1") // имя теста
+    @Description("Направляется запрос на создание курьера с уже зарегестрированными данными") // описание теста
+    public void negativeCreateCourierTest_1() {
+
+        CreateCourierApi createCourierApi = new CreateCourierApi();
+        CreateCourier courier = new CreateCourier(login, password, firstName);
+        createCourierApi.createCourier(courier).then().statusCode(409).assertThat().body("message", equalTo("Этот логин уже используется"));
+    }
+
+    @Test
+    @DisplayName("Негативная проверка создания курьера 2") // имя теста
+    @Description("Направляется запрос на создание курьера без поля login") // описание теста
+    public void negativeCreateCourierTest_2() {
+
+        CreateCourierApi createCourierApi = new CreateCourierApi();
+        CreateCourier courier = new CreateCourier(null, password, firstName);
+        createCourierApi.createCourier(courier).then().statusCode(400).assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"));
+    }
+
+    @Test
+    @DisplayName("Негативная проверка создания курьера 3") // имя теста
+    @Description("Направляется запрос на создание курьера без поля password") // описание теста
+    public void negativeCreateCourierTest_3() {
+
+        CreateCourierApi createCourierApi = new CreateCourierApi();
+        CreateCourier courier = new CreateCourier(login, null, firstName);
+        createCourierApi.createCourier(courier).then().statusCode(400).assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
 }

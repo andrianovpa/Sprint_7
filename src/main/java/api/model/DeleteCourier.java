@@ -1,6 +1,9 @@
+package api.model;
+
 public class DeleteCourier {
-    private  int id;
-    public  DeleteCourier(int id) {
+    private int id;
+
+    public DeleteCourier(int id) {
         this.id = id;
     }
 

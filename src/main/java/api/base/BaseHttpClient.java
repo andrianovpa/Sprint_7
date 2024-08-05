@@ -1,3 +1,5 @@
+package api.base;
+
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -10,7 +12,7 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 
 public abstract class BaseHttpClient {
-    private RequestSpecification baseRequestSpec(){
+    private RequestSpecification baseRequestSpec() {
         return new RequestSpecBuilder()
                 .setBaseUri(URL.PLACEHOLDER_HOST)
                 .addHeader("Content-type", "application/json")
@@ -28,13 +30,14 @@ public abstract class BaseHttpClient {
                 .thenReturn();
     }
 
-    protected Response doPostRequest(String path, Object body){
+    protected Response doPostRequest(String path, Object body) {
         return given()
                 .spec(baseRequestSpec())
                 .body(body)
                 .post(path)
                 .thenReturn();
     }
+
     protected Response doPostRequest(String path, Object body, Map<String, String> params) {
         return given()
                 .spec(baseRequestSpec())
@@ -43,6 +46,7 @@ public abstract class BaseHttpClient {
                 .post(path)
                 .thenReturn();
     }
+
     protected Response doDeleteRequest(String path, Object body) {
         return given()
                 .spec(baseRequestSpec())
